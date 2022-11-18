@@ -37,14 +37,13 @@ public class Grille {
         
     }
     
-    public boolean ajouterjetondanscolonne(Jeton jeton, int colonne){
+    public int ajouterjetondanscolonne(Jeton jeton, int colonne){
         if(!colonneremplie(colonne)){
             CellulesJeu[0][colonne].affecterjeton(jeton);
-            tassergrilleparlebas(colonne);
-            return true;
-        }else{
-            return false;
+            int ligne = tassergrilleparlebas(colonne);
+            return ligne;
         }
+        return -1;
     }
     
     public boolean etreremplie(){
@@ -183,7 +182,7 @@ public class Grille {
         }
     }
     
-    public void tassergrilleparlebas(int colonne){
+    public int tassergrilleparlebas(int colonne){
         Jeton dessus;
         
         for(int n = 0; n < Ligne; n++){
@@ -203,6 +202,12 @@ public class Grille {
                 }
             }
         }
+        for(int k = 0; k < Ligne; k++){
+            if(CellulesJeu[k][colonne].JetonCourant != null){
+                return k;
+            }
+        }
+        return -1;
     }
     
     public boolean colonneremplie(int colonne){

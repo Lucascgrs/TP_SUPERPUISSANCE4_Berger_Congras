@@ -70,7 +70,7 @@ public class Partie {
             couleur = generateurAleat.nextInt(colorlist.size());
             couleurs[k] = colorlist.get(k);
             ListeJoueur[k].affectercouleur(colorlist.get(couleur));
-            System.out.println("Le joueur : " + ListeJoueur[k].Nom + " a la couleur " + couleur);
+            System.out.println("Le joueur : " + ListeJoueur[k].Nom + " a la couleur " + colorlist.get(couleur));
             colorlist.remove(couleur);
         }
         return couleurs;
@@ -78,7 +78,6 @@ public class Partie {
     
     public void debuterpartie(){
         
-        int colonne;
         int nbrcoup = 0;
         int choice;
         
@@ -93,20 +92,14 @@ public class Partie {
             choice = choice();
             switch(choice){
                 case 0:
-                    
+                    jouerjeton();
                     break;
                 case 1:
-                    
+                    recupererjeton();
                     break;
                 case 2:
                     
                     break;
-            }
-            if(JoueurCourant.nombrejetonsrestants > 0){ //dans le cas ou l'on veut placer un pion
-                colonne = asknbr("Colonne du jeton : ");
-                if (!GrilleJeu.colonneremplie(colonne)){
-                    GrilleJeu.ajouterjetondanscolonne(JoueurCourant.poserjeton(), colonne);
-                }
             }
             
             GrilleJeu.affichergrillesurconsole();
@@ -145,6 +138,23 @@ public class Partie {
             rep= sc.nextInt();
         }
         return rep;
+    }
+    
+    public void jouerjeton(){
+        int colonne;
+        if(JoueurCourant.nombrejetonsrestants > 0){ //dans le cas ou l'on veut placer un pion
+            colonne = asknbr("Colonne du jeton : ");
+            if (!GrilleJeu.colonneremplie(colonne)){
+                GrilleJeu.ajouterjetondanscolonne(JoueurCourant.poserjeton(), colonne);
+            }
+        }
+    }
+    
+    public void recupererjeton(){
+        int x = asknbr("Ligne");
+        int y = asknbr("Colonne");
+        Jeton jeton = GrilleJeu.recupererjeton(x, y);
+        JoueurCourant.ajouterjeton(jeton);
     }
     
 }
