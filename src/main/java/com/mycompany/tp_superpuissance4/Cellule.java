@@ -23,9 +23,6 @@ public class Cellule {
     public boolean affecterjeton(Jeton jeton){
         if(JetonCourant == null){
             JetonCourant = jeton;
-            if(presencetrounoir()){
-                activertrounoir();
-            }
             return true;
         }else{
             return false;
@@ -89,11 +86,17 @@ public class Cellule {
     }
     
     public boolean activertrounoir(){
-        if (TrouNoir & supprimerjeton()){
-            TrouNoir = false;
-            return true;
+        if (TrouNoir){
+            if(supprimerjeton()){
+                TrouNoir = false;
+                return true;
+            }
         }
         return false;
+    }
+    
+    public boolean afficherdesintegrateur(){
+        return (Desintegrateur & !TrouNoir);
     }
     
 }

@@ -22,4 +22,9 @@ public class Jeton {
         return Couleur;
     }
     
+@Override
+    public String toString(){
+        return Couleur.substring(0, 1);
+    }
+    
 }

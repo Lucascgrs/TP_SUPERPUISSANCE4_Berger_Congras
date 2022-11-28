@@ -15,7 +15,7 @@ import java.util.List;
 public class main {
     
     public static void main(String[] args){
-        
+
         Joueur j1 = new Joueur("Lucas");
         Joueur j2 = new Joueur("Lea");
         
@@ -24,30 +24,6 @@ public class main {
         Partie.initialiserpartie(42);
         Partie.GrilleJeu.affichergrillesurconsole();
         Partie.debuterpartie();
-        /*
-        List<Integer> l = new ArrayList<Integer>();
-        for (int k = 1; k <= 10; k++){
-            l.add(k);
-        }
-        l.set(8, 0);
-        System.out.println(l.toString());
-        int tmp = 0;
-        int tmp2 = 0;
-        boolean cond = false;
-        for(int i = 0; i < l.size(); i++){
-            tmp = l.get(i);
-            if(tmp != 0){
-                cond = true;
-            }
-            l.set(i, tmp2);
-            tmp2 = tmp;
-            System.out.println(l.toString());
-            if(l.get(i + 1) == 0 & cond){
-                l.set(i + 1, tmp2);
-                System.out.println(l.toString());
-                break;
-            }
-        }*/
         
     }
  

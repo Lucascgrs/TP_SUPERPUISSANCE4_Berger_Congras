@@ -4,6 +4,7 @@
  */
 package com.mycompany.tp_superpuissance4;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -15,25 +16,44 @@ public class Grille {
     int Ligne = 6;
     int Colonne = 7;
     int TrousNoir = 5;
+    int Desintegrateurs = 3;
+    int DesintegrateursTrouNoir = 2;
+    ArrayList<Cellule> ListeTrousNoir = new ArrayList<>();
     Cellule[][] CellulesJeu = new Cellule[Ligne][Colonne];
     
     public Grille(){
         
-    for(int k = 0; k < Ligne; k++){
-        for (int i = 0; i < Colonne; i++){
-            CellulesJeu[k][i] = new Cellule();
+        for(int k = 0; k < Ligne; k++){
+            for (int i = 0; i < Colonne; i++){
+                CellulesJeu[k][i] = new Cellule();
+            }
         }
-    }
-    
-    Random generateurAleat = new Random();
-    int x, y;
-    while(TrousNoir > 0){
-        x = generateurAleat.nextInt(Ligne);
-        y = generateurAleat.nextInt(Colonne);
-        if(CellulesJeu[x][y].placertrounoir()){
-            TrousNoir--;
+
+        Random generateurAleat = new Random();
+        int x, y;
+        while(TrousNoir > 0){
+            x = generateurAleat.nextInt(Ligne);
+            y = generateurAleat.nextInt(Colonne);
+            if(CellulesJeu[x][y].placertrounoir()){
+                ListeTrousNoir.add(CellulesJeu[x][y]);
+                TrousNoir--;
+            }
         }
-    }
+        
+        while(DesintegrateursTrouNoir > 0){
+            ListeTrousNoir.get(generateurAleat.nextInt(ListeTrousNoir.size())).placerdesintegrateur();
+            DesintegrateursTrouNoir--;
+        }
+        
+        while(Desintegrateurs > 0){
+            x = generateurAleat.nextInt(Ligne);
+            y = generateurAleat.nextInt(Colonne);
+            if(!CellulesJeu[x][y].presencetrounoir()){
+                if(CellulesJeu[x][y].placerdesintegrateur()){
+                    Desintegrateurs--;
+                }
+            }
+        }
         
     }
     
@@ -55,23 +75,40 @@ public class Grille {
         return true;
     }
     
-    public void vidergrille(){
+    public void vidergrille(Joueur joueur1, Joueur joueur2){
+        Jeton jeton;
         for(int k = 0; k < Ligne; k++){
             for (int i = 0; i < Colonne; i++){
-                CellulesJeu[k][i].supprimerjeton();
+                if(celluleoccupee(k, i)){
+                    jeton = CellulesJeu[k][i].recupererjeton();
+
+                    if(jeton.lirecouleur().equals(joueur1.Couleur)){
+                        joueur1.ajouterjeton(jeton);
+                    }
+                    
+                    if(jeton.lirecouleur().equals(joueur2.Couleur)){
+                        joueur2.ajouterjeton(jeton);
+                    }
+                    
+                    CellulesJeu[k][i].supprimerjeton();
+                    
+                }
             }
         }
     }
     
     public void affichergrillesurconsole(){
+        String txt;
         for (int k = 0; k < Ligne; k++){
             for (int i = 0; i < Colonne; i++){
                 
-                if (celluleoccupee(k, i)){
-                    System.out.print("[" + CellulesJeu[k][i].lirecouleurdujeton() + "]");
-                }else{
-                    System.out.print("[" + null + "]");
+                txt = "[" + CellulesJeu[k][i].lirecouleurdujeton() + " TN:" + CellulesJeu[k][i].TrouNoir;
+                if(!CellulesJeu[k][i].presencetrounoir()& CellulesJeu[k][i].presencedesintegrateur()){
+                    txt += " D";
                 }
+                txt += "]";
+                
+                System.out.print(txt);
                 
                 if(i == Colonne - 1){
                     System.out.print("\n");
@@ -81,7 +118,7 @@ public class Grille {
     }
     
     public boolean celluleoccupee(int ligne, int colonne){
-        return (CellulesJeu[ligne][colonne].JetonCourant != null);
+        return (CellulesJeu[ligne][colonne].recupererjeton() != null);
     }
     
     public String lirecouleurdujeton(int ligne, int colonne){
@@ -97,7 +134,11 @@ public class Grille {
                 
                 if(celluleoccupee(k, i)){
                     if (CellulesJeu[k][i].lirecouleurdujeton().equals(joueur.Couleur)){
-                        System.out.println("\nVerif win : " + k + " " + i + " " + joueur.Couleur);
+                        
+                        if(details){
+                            System.out.println("\nVerif win : " + k + " " + i + " " + joueur.Couleur);
+                        }
+                        
                         h = 0; v = 0; d1 = 0; d2 = 0;
                         
                         for(int x = k; (x <= k + 3) & (x < Ligne); x++){
@@ -155,43 +196,16 @@ public class Grille {
         return false;
     }
     
-    public void tassergrilleparlehaut(int colonne){ //jsp ce que ca doit etre le int
-        Jeton tmp;
-        Jeton tmp2 = null;
-        boolean cond = false;
-        
-        for(int k = 0; k < Ligne - 1; k++){
-            System.out.println(k);
-            tmp = CellulesJeu[k][colonne].JetonCourant;
-            
-            if (tmp != null){
-                cond = true;
-            }
-            
-            if(tmp2 != null){
-                CellulesJeu[k][colonne].affecterjeton(tmp2);
-            }else{
-                CellulesJeu[k][colonne].supprimerjeton();
-            }
-            
-            if (cond & celluleoccupee(k+1, colonne)){
-                break;
-            }else if(cond & !celluleoccupee(k+1, colonne)){
-                break;
-            }
-        }
-    }
-    
-    public int tassergrilleparlebas(int colonne){
+    public int tassergrilleparlebas(int colonne){       //refaire cette fonction mange des jetons
         Jeton dessus;
         
         for(int n = 0; n < Ligne; n++){
             
             for(int k = Ligne - 1; k > 0; k--){
                 
-                if(CellulesJeu[k][colonne].JetonCourant == null){ //on part du bas et on regarde si la cellule de la ligne k est vide
+                if(CellulesJeu[k][colonne].recupererjeton() == null){ //on part du bas et on regarde si la cellule de la ligne k est vide
                     for(int i = k; i > 0; i--){
-                        dessus = CellulesJeu[i - 1][colonne].JetonCourant;
+                        dessus = CellulesJeu[i - 1][colonne].recupererjeton();
                         if(dessus != null){
                             CellulesJeu[i][colonne].affecterjeton(dessus);
                             CellulesJeu[i - 1][colonne].supprimerjeton();
@@ -203,7 +217,7 @@ public class Grille {
             }
         }
         for(int k = 0; k < Ligne; k++){
-            if(CellulesJeu[k][colonne].JetonCourant != null){
+            if(CellulesJeu[k][colonne].recupererjeton() != null){
                 return k;
             }
         }
@@ -211,7 +225,7 @@ public class Grille {
     }
     
     public boolean colonneremplie(int colonne){
-        return (CellulesJeu[0][colonne].JetonCourant != null);
+        return (CellulesJeu[0][colonne].recupererjeton() != null);
     }
     
     public boolean placerdesintegrateur(int ligne, int colonne){
@@ -233,7 +247,7 @@ public class Grille {
     }
     
     public boolean supprimerjeton(int ligne, int colonne){
-        if (!celluleoccupee(ligne, colonne)){
+        if (celluleoccupee(ligne, colonne)){
             CellulesJeu[ligne][colonne].supprimerjeton();
             tassergrilleparlebas(colonne);
             return true;
@@ -243,9 +257,21 @@ public class Grille {
     }
     
     public Jeton recupererjeton(int ligne, int colonne){
-        Jeton jeton = CellulesJeu[ligne][colonne].JetonCourant;
+        Jeton jeton = CellulesJeu[ligne][colonne].recupererjeton();
         CellulesJeu[ligne][colonne].supprimerjeton();
+        tassergrilleparlebas(colonne);
         return jeton;
+    }
+    
+    public boolean contain(Joueur joueur){
+        for(int k = 0; k < Ligne; k++){
+            for (int i = 0; i < Colonne; i++){
+                if(CellulesJeu[k][i].lirecouleurdujeton().equals(joueur.Couleur)){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
 }
