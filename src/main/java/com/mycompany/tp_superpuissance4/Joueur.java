@@ -21,6 +21,7 @@ public class Joueur {
     public Joueur(String nom){
         
         Nom = nom;
+        nombredesintegrateurs = 0;
         
     }
     
