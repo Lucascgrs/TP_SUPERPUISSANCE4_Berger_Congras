@@ -20,7 +20,7 @@ public class main {
         Joueur j2 = new Joueur("Lea");
         
         Partie Partie = new Partie(j1, j2);
-        
+        System.out.println(Partie.GrilleJeu.color_texte("Rouge"));
         Partie.initialiserpartie(42);
         Partie.GrilleJeu.affichergrillesurconsole();
         Partie.debuterpartie();

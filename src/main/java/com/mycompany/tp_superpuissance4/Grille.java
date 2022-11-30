@@ -5,6 +5,8 @@
 package com.mycompany.tp_superpuissance4;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -272,6 +274,18 @@ public class Grille {
             }
         }
         return false;
+    }
+    
+    public String color_texte(String couleur){
+        Map<String, String> couleurs = new HashMap<String, String>(){{
+            put("Rouge", "\033[0;31m");
+            put("Jaune", "\033[0;33m");
+            put("Bleu", "\033[0;34m");
+            put("Vert", "\033[0;32m");
+            put("Noir", "\033[0;30m");
+            put("Orange", "\033[48;2;255;165;0m");
+        }};
+        return couleurs.getOrDefault(this, couleur);
     }
     
 }
