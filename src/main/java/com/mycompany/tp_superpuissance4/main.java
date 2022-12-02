@@ -22,7 +22,7 @@ public class main {
         Partie Partie = new Partie(j1, j2);
 
         Partie.initialiserpartie(30);
-        String c = Partie.GrilleJeu.color_texte("Rouge");
+
         Partie.GrilleJeu.affichergrillesurconsole();
         Partie.debuterpartie();
         

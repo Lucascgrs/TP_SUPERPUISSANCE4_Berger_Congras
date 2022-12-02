@@ -169,18 +169,18 @@ public class window_p4 extends javax.swing.JFrame {
                 name_player1ActionPerformed(evt);
             }
         });
-        Panneau_creation_partie.add(name_player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, 100, 20));
+        Panneau_creation_partie.add(name_player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, 100, 30));
 
         name_player2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 name_player2ActionPerformed(evt);
             }
         });
-        Panneau_creation_partie.add(name_player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 60, 100, 20));
+        Panneau_creation_partie.add(name_player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 60, 100, 30));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel1.setText("Nom du joueur 2 : ");
-        Panneau_creation_partie.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 110, 30));
+        Panneau_creation_partie.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 110, 30));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setText("Nom du joueur 1 : ");
@@ -321,6 +321,8 @@ public class window_p4 extends javax.swing.JFrame {
         Panneau_infos_joueurs.setVisible(true);
         Panneau_infos_partie.setVisible(true);
         initialiserpartie(32);
+        Paneau_Grille.repaint();
+        //new_game.setEnabled(false);
     }//GEN-LAST:event_new_gameActionPerformed
 
     /**
@@ -362,20 +364,20 @@ public class window_p4 extends javax.swing.JFrame {
     public void initialiserpartie(int nombrejetons){
         
         int TrousNoir = 5;
-        int Desintegrateurs = 3;
-        int DesintegrateursTrouNoir = 2;
+        int Desintegrateurs = 2;
+        int DesintegrateursTrouNoir = 3;
         ArrayList<Cellule> ListeTrousNoir = new ArrayList<>();
         
         Joueur j1 = new Joueur(name_player1.getText());
         Joueur j2 = new Joueur(name_player2.getText());
         ListeJoueurs[0] = j1;
         ListeJoueurs[1] = j2;
-        System.out.println("Le joueur : " + j1.Nom + " a la couleur : " + j1.Couleur + "\nLe joueur : " + j2.Nom + " a la couleur : " + j2.Couleur);
         
         String[] couleurs = attribuercouleursauxjoueurs();
+        //System.out.println("Le joueur : " + j1.Nom + " a la couleur : " + j1.Couleur + "\nLe joueur : " + j2.Nom + " a la couleur : " + j2.Couleur);
         
         GrilleDeJeu.vidergrille(ListeJoueurs[0], ListeJoueurs[1]);
-        
+        GrilleDeJeu.affichergrillesurconsole();
         if(nombrejetons % 2 != 0){
             nombrejetons++;
         }
