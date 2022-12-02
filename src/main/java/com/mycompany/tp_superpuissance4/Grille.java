@@ -4,10 +4,7 @@
  */
 package com.mycompany.tp_superpuissance4;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 
 /**
  *
@@ -17,11 +14,8 @@ public class Grille {
     
     int Ligne = 6;
     int Colonne = 7;
-    int TrousNoir = 5;
-    int Desintegrateurs = 3;
-    int DesintegrateursTrouNoir = 2;
-    ArrayList<Cellule> ListeTrousNoir = new ArrayList<>();
     Cellule[][] CellulesJeu = new Cellule[Ligne][Colonne];
+    final String RESET = "\033[0m";  // Text Reset
     
     public Grille(){
         
@@ -30,33 +24,6 @@ public class Grille {
                 CellulesJeu[k][i] = new Cellule();
             }
         }
-
-        Random generateurAleat = new Random();
-        int x, y;
-        while(TrousNoir > 0){
-            x = generateurAleat.nextInt(Ligne);
-            y = generateurAleat.nextInt(Colonne);
-            if(CellulesJeu[x][y].placertrounoir()){
-                ListeTrousNoir.add(CellulesJeu[x][y]);
-                TrousNoir--;
-            }
-        }
-        
-        while(DesintegrateursTrouNoir > 0){
-            ListeTrousNoir.get(generateurAleat.nextInt(ListeTrousNoir.size())).placerdesintegrateur();
-            DesintegrateursTrouNoir--;
-        }
-        
-        while(Desintegrateurs > 0){
-            x = generateurAleat.nextInt(Ligne);
-            y = generateurAleat.nextInt(Colonne);
-            if(!CellulesJeu[x][y].presencetrounoir()){
-                if(CellulesJeu[x][y].placerdesintegrateur()){
-                    Desintegrateurs--;
-                }
-            }
-        }
-        
     }
     
     public int ajouterjetondanscolonne(Jeton jeton, int colonne){
@@ -104,7 +71,7 @@ public class Grille {
         for (int k = 0; k < Ligne; k++){
             for (int i = 0; i < Colonne; i++){
                 
-                txt = "[" + CellulesJeu[k][i].lirecouleurdujeton() + " TN:" + CellulesJeu[k][i].TrouNoir;
+                txt = "[" + color_texte(CellulesJeu[k][i].lirecouleurdujeton()) + CellulesJeu[k][i].lirecouleurdujeton() + RESET + " TN:" + CellulesJeu[k][i].TrouNoir;
                 if(!CellulesJeu[k][i].presencetrounoir()& CellulesJeu[k][i].presencedesintegrateur()){
                     txt += " D";
                 }
@@ -277,7 +244,7 @@ public class Grille {
     }
     
     public String color_texte(String couleur){
-        Map<String, String> couleurs = new HashMap<String, String>(){{
+        HashMap<String, String> couleurs = new HashMap<String, String>(){{
             put("Rouge", "\033[0;31m");
             put("Jaune", "\033[0;33m");
             put("Bleu", "\033[0;34m");
@@ -285,7 +252,8 @@ public class Grille {
             put("Noir", "\033[0;30m");
             put("Orange", "\033[48;2;255;165;0m");
         }};
-        return couleurs.getOrDefault(this, couleur);
+       
+        return couleurs.get(couleur);
     }
     
 }

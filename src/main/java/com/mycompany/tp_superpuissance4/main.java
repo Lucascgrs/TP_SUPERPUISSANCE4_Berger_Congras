@@ -15,13 +15,14 @@ import java.util.List;
 public class main {
     
     public static void main(String[] args){
-
+        
         Joueur j1 = new Joueur("Lucas");
         Joueur j2 = new Joueur("Lea");
         
         Partie Partie = new Partie(j1, j2);
-        System.out.println(Partie.GrilleJeu.color_texte("Rouge"));
-        Partie.initialiserpartie(42);
+
+        Partie.initialiserpartie(30);
+        String c = Partie.GrilleJeu.color_texte("Rouge");
         Partie.GrilleJeu.affichergrillesurconsole();
         Partie.debuterpartie();
         

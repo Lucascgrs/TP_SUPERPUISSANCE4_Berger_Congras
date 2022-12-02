@@ -4,17 +4,43 @@
  */
 package com.mycompany.tp_superpuissance4;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 /**
  *
  * @author lucas
  */
 public class window_p4 extends javax.swing.JFrame {
 
+    int Ligne = 6;
+    int Colonne = 7;
+    Joueur ListeJoueurs[] = new Joueur[2];
+    Joueur JoueurCourant;
+    Grille GrilleDeJeu = new Grille();
+    ArrayList<String> colorlist = new ArrayList<String>(){{
+        add("Rouge");
+        add("Jaune");
+        add("Bleu");
+        add("Vert");
+        add("noir");
+        add("Blanc");
+        add("Orange");
+    }};
+    
     /**
      * Creates new form window_p4
      */
     public window_p4() {
         initComponents();
+        Panneau_infos_joueurs.setVisible(false);
+        Panneau_infos_partie.setVisible(false);
+        for (int k = 0; k < Ligne; k++){
+            for (int i = 0; i < Colonne; i ++){
+                CelluleGraphique cellgraph = new CelluleGraphique(GrilleDeJeu.CellulesJeu[k][i]);
+                Paneau_Grille.add(cellgraph);
+            }
+        }
     }
 
     /**
@@ -70,7 +96,7 @@ public class window_p4 extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Paneau_Grille.setBackground(new java.awt.Color(255, 255, 255));
-        Paneau_Grille.setLayout(new java.awt.GridLayout(1, 0));
+        Paneau_Grille.setLayout(new java.awt.GridLayout(6, 7));
         getContentPane().add(Paneau_Grille, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 672, 576));
 
         Panneau_infos_joueurs.setBackground(new java.awt.Color(153, 255, 153));
@@ -249,9 +275,11 @@ public class window_p4 extends javax.swing.JFrame {
         });
         getContentPane().add(colonne_6, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 20, -1, -1));
 
-        setBounds(0, 0, 1085, 778);
+        setBounds(0, 0, 1029, 690);
     }// </editor-fold>//GEN-END:initComponents
 
+
+    
     private void colonne_4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colonne_4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_colonne_4ActionPerformed
@@ -290,6 +318,9 @@ public class window_p4 extends javax.swing.JFrame {
 
     private void new_gameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_new_gameActionPerformed
         // TODO add your handling code here:
+        Panneau_infos_joueurs.setVisible(true);
+        Panneau_infos_partie.setVisible(true);
+        initialiserpartie(32);
     }//GEN-LAST:event_new_gameActionPerformed
 
     /**
@@ -326,6 +357,89 @@ public class window_p4 extends javax.swing.JFrame {
             }
         });
     }
+    
+    
+    public void initialiserpartie(int nombrejetons){
+        
+        int TrousNoir = 5;
+        int Desintegrateurs = 3;
+        int DesintegrateursTrouNoir = 2;
+        ArrayList<Cellule> ListeTrousNoir = new ArrayList<>();
+        
+        Joueur j1 = new Joueur(name_player1.getText());
+        Joueur j2 = new Joueur(name_player2.getText());
+        ListeJoueurs[0] = j1;
+        ListeJoueurs[1] = j2;
+        System.out.println("Le joueur : " + j1.Nom + " a la couleur : " + j1.Couleur + "\nLe joueur : " + j2.Nom + " a la couleur : " + j2.Couleur);
+        
+        String[] couleurs = attribuercouleursauxjoueurs();
+        
+        GrilleDeJeu.vidergrille(ListeJoueurs[0], ListeJoueurs[1]);
+        
+        if(nombrejetons % 2 != 0){
+            nombrejetons++;
+        }
+        
+        JoueurCourant = ListeJoueurs[0];
+        Jeton jeton;
+        
+        for(int k = 0; k < nombrejetons; k++){
+            if (k%2 == 0){
+                jeton = new Jeton(couleurs[0]);
+                ListeJoueurs[0].ajouterjeton(jeton);
+            }else{
+                jeton = new Jeton(couleurs[1]);
+                ListeJoueurs[1].ajouterjeton(jeton);
+            }
+        }
+        
+        //placer les trous noir et les téléporteurs
+        
+        Random generateurAleat = new Random();
+        int x, y;
+        while(TrousNoir > 0){
+            x = generateurAleat.nextInt(Ligne);
+            y = generateurAleat.nextInt(Colonne);
+            if(GrilleDeJeu.CellulesJeu[x][y].placertrounoir()){
+                ListeTrousNoir.add(GrilleDeJeu.CellulesJeu[x][y]);
+                TrousNoir--;
+            }
+        }
+        
+        while(DesintegrateursTrouNoir > 0){
+            ListeTrousNoir.get(generateurAleat.nextInt(ListeTrousNoir.size())).placerdesintegrateur();
+            DesintegrateursTrouNoir--;
+        }
+        
+        while(Desintegrateurs > 0){
+            x = generateurAleat.nextInt(Ligne);
+            y = generateurAleat.nextInt(Colonne);
+            if(!GrilleDeJeu.CellulesJeu[x][y].presencetrounoir()){
+                if(GrilleDeJeu.CellulesJeu[x][y].placerdesintegrateur()){
+                    Desintegrateurs--;
+                }
+            }
+        }
+        
+    }
+    
+    public String[] attribuercouleursauxjoueurs(){
+        
+        int couleur;
+        String[] couleurs = new String[2];
+        Random generateurAleat = new Random();
+        
+        for(int k = 0; k < 2; k++){
+            
+            couleur = generateurAleat.nextInt(colorlist.size());
+            couleurs[k] = colorlist.get(couleur);
+            ListeJoueurs[k].affectercouleur(colorlist.get(couleur));
+            System.out.println("Le joueur : " + ListeJoueurs[k].Nom + " a la couleur " + colorlist.get(couleur));
+            colorlist.remove(couleur);
+        }
+        return couleurs;
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Desintegrateurs1;

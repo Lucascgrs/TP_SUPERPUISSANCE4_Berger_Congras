@@ -22,7 +22,7 @@ public class Partie {
         add("Jaune");
         add("Bleu");
         add("Vert");
-        add("noir");
+        add("Noir");
         add("Blanc");
         add("Orange");
     }};
@@ -35,6 +35,13 @@ public class Partie {
     }
     
     public void initialiserpartie(int nombrejetons){
+        
+        int Ligne = 6;
+        int Colonne = 7;
+        int TrousNoir = 5;
+        int Desintegrateurs = 3;
+        int DesintegrateursTrouNoir = 2;
+        ArrayList<Cellule> ListeTrousNoir = new ArrayList<>();
         
         if(nombrejetons % 2 != 0){
             nombrejetons++;
@@ -56,6 +63,32 @@ public class Partie {
         }
         
         //placer les trous noir et les téléporteurs
+        
+        Random generateurAleat = new Random();
+        int x, y;
+        while(TrousNoir > 0){
+            x = generateurAleat.nextInt(Ligne);
+            y = generateurAleat.nextInt(Colonne);
+            if(GrilleJeu.CellulesJeu[x][y].placertrounoir()){
+                ListeTrousNoir.add(GrilleJeu.CellulesJeu[x][y]);
+                TrousNoir--;
+            }
+        }
+        
+        while(DesintegrateursTrouNoir > 0){
+            ListeTrousNoir.get(generateurAleat.nextInt(ListeTrousNoir.size())).placerdesintegrateur();
+            DesintegrateursTrouNoir--;
+        }
+        
+        while(Desintegrateurs > 0){
+            x = generateurAleat.nextInt(Ligne);
+            y = generateurAleat.nextInt(Colonne);
+            if(!GrilleJeu.CellulesJeu[x][y].presencetrounoir()){
+                if(GrilleJeu.CellulesJeu[x][y].placerdesintegrateur()){
+                    Desintegrateurs--;
+                }
+            }
+        }
         
     }
     
