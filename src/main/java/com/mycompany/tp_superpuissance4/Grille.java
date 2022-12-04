@@ -29,15 +29,15 @@ public class Grille {
     public int ajouterjetondanscolonne(Jeton jeton, int colonne){
         int ligne = -1;
         if(!colonneremplie(colonne)){
-            if(CellulesJeu[Ligne][colonne].JetonCourant == null){
-                CellulesJeu[Ligne][colonne].affecterjeton(jeton);
-                return Ligne;
+            if(CellulesJeu[Ligne - 1][colonne].JetonCourant == null){
+                CellulesJeu[Ligne - 1][colonne].affecterjeton(jeton);
+                return Ligne - 1;
             }
             
             for(int k = 0; k < Ligne; k++){
                 if (CellulesJeu[k][colonne].JetonCourant != null){
                     CellulesJeu[k - 1][colonne].affecterjeton(jeton);
-                    ligne = k;
+                    ligne = k - 1;
                     break;
                 }
             }
@@ -73,7 +73,7 @@ public class Grille {
                     
                 }
                 if(CellulesJeu[k][i].presencedesintegrateur()){
-                    CellulesJeu[k][i].recupererdesintegrateur();
+                    CellulesJeu[k][i].supprimerdesintegrateur();
                 }
                 if(CellulesJeu[k][i].presencetrounoir()){
                     CellulesJeu[k][i].TrouNoir = false;
@@ -209,6 +209,17 @@ public class Grille {
         return -1;
     }
     
+    public void tassergrille(){
+        for(int k = 0; k < Colonne; k++){
+            for(int i = Ligne - 1; i > 0; i--){
+                if(CellulesJeu[i][k].JetonCourant == null){
+                    CellulesJeu[i][k].JetonCourant = CellulesJeu[i - 1][k].JetonCourant;
+                    CellulesJeu[i - 1][k].JetonCourant = null;
+                }
+            }
+        }
+    }
+    
     public boolean colonneremplie(int colonne){
         return (CellulesJeu[0][colonne].recupererjeton() != null);
     }
@@ -234,7 +245,7 @@ public class Grille {
     public boolean supprimerjeton(int ligne, int colonne){
         if (celluleoccupee(ligne, colonne)){
             CellulesJeu[ligne][colonne].supprimerjeton();
-            tassergrilleparlebas(colonne);
+            tassergrille();
             return true;
         }else{
             return false;
@@ -244,7 +255,7 @@ public class Grille {
     public Jeton recupererjeton(int ligne, int colonne){
         Jeton jeton = CellulesJeu[ligne][colonne].recupererjeton();
         CellulesJeu[ligne][colonne].supprimerjeton();
-        tassergrilleparlebas(colonne);
+        tassergrille();
         return jeton;
     }
     
@@ -267,6 +278,7 @@ public class Grille {
             put("Vert", "\033[0;32m");
             put("Noir", "\033[0;30m");
             put("Orange", "\033[48;2;255;165;0m");
+            put("Blanc", "");
         }};
        
         return couleurs.get(couleur);

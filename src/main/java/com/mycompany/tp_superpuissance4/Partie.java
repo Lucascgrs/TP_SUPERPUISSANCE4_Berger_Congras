@@ -178,7 +178,7 @@ public class Partie {
         int rep = sc.nextInt();
         return rep;
     }
-    
+            
     public int choice(){
         Scanner sc = new Scanner(System.in);
         int rep = -1;
@@ -228,7 +228,7 @@ public class Partie {
                     }
 
                     if(GrilleJeu.CellulesJeu[lignejeton][colonne].presencedesintegrateur()){
-                        GrilleJeu.CellulesJeu[lignejeton][colonne].recupererdesintegrateur();
+                        GrilleJeu.CellulesJeu[lignejeton][colonne].recupererdesintegrateur(JoueurCourant);
                     }
                 }
             }

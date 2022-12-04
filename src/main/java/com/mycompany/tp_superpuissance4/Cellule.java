@@ -76,13 +76,18 @@ public class Cellule {
         }
     }
     
-    public boolean recupererdesintegrateur(){
+    public boolean recupererdesintegrateur(Joueur joueur){
         if (Desintegrateur){
             Desintegrateur = false;
+            joueur.obtenirdesintegrateur();
             return true;
         }else{
             return false;
         }
+    }
+    
+    public void supprimerdesintegrateur(){
+        Desintegrateur = false;
     }
     
     public boolean activertrounoir(){
