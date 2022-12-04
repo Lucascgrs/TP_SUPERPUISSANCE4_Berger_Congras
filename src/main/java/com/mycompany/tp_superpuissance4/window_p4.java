@@ -59,7 +59,7 @@ public class window_p4 extends javax.swing.JFrame {
                         if(v1 & !v2){jeu_infos.setText("Victoire de " + ListeJoueurs[0].Nom);}
                         if(v2 & !v1){jeu_infos.setText("Victoire de " + ListeJoueurs[1].Nom);}
                 
-                        if(v1 & !v2){
+                        if(v1 & v2){
                             if(JoueurCourant == ListeJoueurs[0]){jeu_infos.setText("Victoire de " + ListeJoueurs[1].Nom + " sur une faute de jeu de " + JoueurCourant.Nom);}
                             if(JoueurCourant == ListeJoueurs[1]){jeu_infos.setText("Victoire de " + ListeJoueurs[0].Nom + " sur une faute de jeu de " + JoueurCourant.Nom);}
                         }
@@ -549,7 +549,7 @@ public class window_p4 extends javax.swing.JFrame {
                 if(v1 & !v2){jeu_infos.setText("Victoire de " + ListeJoueurs[0].Nom);}
                 if(v2 & !v1){jeu_infos.setText("Victoire de " + ListeJoueurs[1].Nom);}
                 
-                if(v1 & !v2){
+                if(v1 & v2){
                     if(JoueurCourant == ListeJoueurs[0]){jeu_infos.setText("Victoire de " + ListeJoueurs[1].Nom + " sur une faute de jeu de " + JoueurCourant.Nom);}
                     if(JoueurCourant == ListeJoueurs[1]){jeu_infos.setText("Victoire de " + ListeJoueurs[0].Nom + " sur une faute de jeu de " + JoueurCourant.Nom);}
                 }
